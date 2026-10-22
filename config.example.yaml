@@ -69,6 +69,9 @@ openai:
   embedding_max_input_tokens: 8000
   max_retries: 4
   retry_base_seconds: 1.5
+gemini:
+  api_key: ''
+  chat_model: gemini-3.5-flash
 logging:
   level: INFO
   max_bytes: 5242880
