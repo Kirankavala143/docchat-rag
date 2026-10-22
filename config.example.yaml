@@ -34,7 +34,7 @@ retrieval:
     high_score: 0.6
     medium_score: 0.35
 chat:
-  provider: openai
+  provider: gemini
   fallback_provider: extractive
   refusal_message: The document does not contain enough information to answer that question.
   recent_messages: 10
