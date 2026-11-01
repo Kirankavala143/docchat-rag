@@ -61,3 +61,14 @@ def configure_logging(config: Config) -> logging.Logger:
     logger.addHandler(console_handler)
     logger.propagate = False
     return logger
+
+def close_logging(logger: logging.Logger | None = None) -> None:
+    """Flush and close DocChat logging handlers."""
+    target = logger or logging.getLogger("docchat")
+
+    for handler in target.handlers[:]:
+        target.removeHandler(handler)
+        try:
+            handler.flush()
+        finally:
+            handler.close()

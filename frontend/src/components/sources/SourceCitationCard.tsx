@@ -6,10 +6,10 @@ import { citationMatchLevel, cn } from "@/lib/utils";
 import type { Citation } from "@/types/api";
 
 const matchStyles = {
-  exact: "border-blue-100 bg-blue-50 text-blue-700",
-  high: "border-emerald-100 bg-emerald-50 text-emerald-700",
-  medium: "border-amber-100 bg-amber-50 text-amber-700",
-  low: "border-slate-200 bg-slate-50 text-slate-600",
+  exact: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300",
+  high: "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-300",
+  medium: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/50 dark:text-amber-300",
+  low: "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300",
 };
 
 export function SourceCitationCard({ citation, index }: { citation: Citation; index: number }) {
@@ -18,11 +18,11 @@ export function SourceCitationCard({ citation, index }: { citation: Citation; in
   const pageLabel = citation.page_end && citation.page_end !== citation.page_number ? `Pages ${citation.page_number}–${citation.page_end}` : `Page ${citation.page_number}`;
 
   return (
-    <article className="overflow-hidden rounded-lg border bg-white shadow-[0_1px_2px_rgba(15,23,42,.03)] transition-shadow hover:shadow-sm">
+    <article className="overflow-hidden rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-shadow hover:shadow-md">
       <button type="button" className="w-full p-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring" onClick={() => setExpanded((value) => !value)} aria-expanded={expanded}>
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="grid h-5 w-5 place-items-center rounded bg-slate-950 text-[9px] font-semibold text-white">{index + 1}</span>
+            <span className="grid h-5 w-5 place-items-center rounded bg-primary text-[9px] font-semibold text-primary-foreground">{index + 1}</span>
             <span className="text-[10px] font-medium text-muted-foreground">{pageLabel}</span>
           </div>
           <div className="flex items-center gap-1.5">
@@ -32,9 +32,9 @@ export function SourceCitationCard({ citation, index }: { citation: Citation; in
         </div>
         <div className="mt-3 flex items-start gap-2">
           <BookOpenText className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-          <p className="line-clamp-1 text-[11px] font-medium text-slate-700">{citation.section_title || "Document passage"}</p>
+          <p className="line-clamp-1 text-[11px] font-medium text-foreground">{citation.section_title || "Document passage"}</p>
         </div>
-        <p className={cn("mt-2 text-[11px] leading-[1.65] text-slate-600", expanded ? "" : "line-clamp-4")}>{citation.snippet}</p>
+        <p className={cn("mt-2 text-[11px] leading-[1.65] text-muted-foreground", expanded ? "" : "line-clamp-4")}>{citation.snippet}</p>
         <div className="mt-3 flex items-center justify-between text-[8px] uppercase tracking-wide text-muted-foreground/80">
           <span>Chunk {citation.chunk_id.slice(0, 8)}</span>
           <span>{Math.round(Math.min(1, Math.max(0, citation.score)) * 100)}% relevance</span>

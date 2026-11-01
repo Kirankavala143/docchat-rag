@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import App from "@/App";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import "@/index.css";
 
 const queryClient = new QueryClient({
@@ -19,11 +20,13 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider delayDuration={350}>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </TooltipProvider>
+  <TooltipProvider delayDuration={350}>
+    <ThemeProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </ThemeProvider>
+  </TooltipProvider>
     </QueryClientProvider>
   </StrictMode>,
 );

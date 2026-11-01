@@ -40,12 +40,12 @@ export function ChatHeader({ document, models, selectedModel, deleting, reindexi
         : document.error_message || "Processing failed. Reindex the document or upload it again.";
 
   return (
-    <header className="flex min-h-[72px] shrink-0 items-center justify-between gap-4 border-b bg-white px-4 sm:px-5">
+    <header className="flex min-h-[72px] shrink-0 items-center justify-between gap-4 border-b border-border bg-background px-4 text-foreground sm:px-5">
       <div className="flex min-w-0 items-center gap-3">
-        <div className="hidden h-9 w-9 shrink-0 place-items-center rounded-lg border bg-slate-50 text-slate-500 sm:grid"><FileText className="h-4 w-4" /></div>
+        <div className="hidden h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-muted text-muted-foreground sm:grid"><FileText className="h-4 w-4" /></div>
         <div className="min-w-0">
           <div className="flex min-w-0 items-center gap-2">
-            <h1 className="truncate text-sm font-semibold tracking-tight text-slate-900 sm:text-base" title={document?.filename}>
+            <h1 className="truncate text-sm font-semibold tracking-tight text-foreground sm:text-base" title={document?.filename}>
               {document ? displayDocumentName(document.filename) : "Document workspace"}
             </h1>
             {document && <DocumentStatusBadge status={document.status} />}
@@ -56,7 +56,7 @@ export function ChatHeader({ document, models, selectedModel, deleting, reindexi
 
       <div className="flex shrink-0 items-center gap-1.5">
         <Select value={selectedModel} onValueChange={onModelChange} disabled={models.length < 2}>
-          <SelectTrigger className="h-9 w-[118px] border-slate-200 bg-white px-3 text-xs font-semibold leading-none text-slate-700 shadow-none sm:w-[132px]" aria-label={`Chat model: ${selectedModelLabel}`}>
+          <SelectTrigger className="h-9 w-[118px] border-border bg-background px-3 text-xs font-semibold leading-none text-foreground shadow-none sm:w-[132px]" aria-label={`Chat model: ${selectedModelLabel}`}>
             <SelectValue aria-label={selectedModelLabel}>{selectedModelLabel}</SelectValue>
           </SelectTrigger>
           <SelectContent align="end" className="min-w-[220px]">
@@ -84,13 +84,13 @@ export function ChatHeader({ document, models, selectedModel, deleting, reindexi
           <AlertDialog>
             <Tooltip>
               <TooltipTrigger asChild>
-                <AlertDialogTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-red-50 hover:text-destructive" aria-label="Delete document"><Trash2 className="h-3.5 w-3.5" /></Button></AlertDialogTrigger>
+                <AlertDialogTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete document"><Trash2 className="h-3.5 w-3.5" /></Button></AlertDialogTrigger>
               </TooltipTrigger>
               <TooltipContent>Delete document</TooltipContent>
             </Tooltip>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <div className="mb-2 grid h-10 w-10 place-items-center rounded-full bg-red-50 text-red-600"><AlertTriangle className="h-5 w-5" /></div>
+                <div className="mb-2 grid h-10 w-10 place-items-center rounded-full bg-destructive/10 text-destructive"><AlertTriangle className="h-5 w-5" /></div>
                 <AlertDialogTitle>Delete “{displayDocumentName(document.filename)}”?</AlertDialogTitle>
                 <AlertDialogDescription>This permanently removes the local file, its search index, conversations, messages, citations, and feedback. This action cannot be undone.</AlertDialogDescription>
               </AlertDialogHeader>

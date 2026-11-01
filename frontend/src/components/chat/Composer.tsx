@@ -26,9 +26,9 @@ export function Composer({ documentStatus, busy, draftPrompt, onSend }: { docume
   const note = !documentStatus ? "Select a document first" : documentStatus === "processing" ? "Available after processing" : documentStatus === "failed" ? "Reindex the document to continue" : "Enter to send · Shift + Enter for a new line";
 
   return (
-    <footer className="shrink-0 border-t bg-white px-3 pb-3 pt-3 sm:px-6 sm:pb-4">
+    <footer className="shrink-0 border-t border-border bg-background px-3 pb-3 pt-3 text-foreground sm:px-6 sm:pb-4">
       <div className="mx-auto max-w-3xl">
-        <div className="rounded-xl border bg-white p-2 shadow-[0_8px_30px_rgba(15,23,42,.07)] transition-shadow focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10">
+        <div className="rounded-xl border border-border bg-card p-2 shadow-sm transition-shadow focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10">
           <Textarea
             ref={textareaRef}
             rows={1}
@@ -43,7 +43,7 @@ export function Composer({ documentStatus, busy, draftPrompt, onSend }: { docume
             }}
             disabled={!ready || busy}
             placeholder={ready ? "Ask a question about this document…" : note}
-            className="max-h-36 min-h-[42px] resize-none border-0 px-2 py-2.5 text-[13px] leading-5 shadow-none focus-visible:ring-0 disabled:bg-white"
+            className="max-h-36 min-h-[42px] resize-none border-0 bg-transparent px-2 py-2.5 text-[13px] leading-5 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:ring-0 disabled:bg-transparent"
             style={{ height: "auto" }}
           />
           <div className="flex items-center justify-between px-1 pt-1">

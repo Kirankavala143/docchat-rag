@@ -8,7 +8,7 @@ from backend.docchat.infrastructure.database import Database
 from backend.docchat.infrastructure.openai_client import OpenAIClient
 from backend.docchat.services.documents import chunk_pages, parse_document
 from backend.docchat.services.rag import RagService
-from tests.helpers import test_config
+from tests.helpers import make_test_config
 
 
 class UploadToChatIntegrationTests(unittest.TestCase):
@@ -21,7 +21,7 @@ class UploadToChatIntegrationTests(unittest.TestCase):
                 "Amounts above the threshold require director approval.",
                 encoding="utf-8",
             )
-            config = test_config(root)
+            config = make_test_config(root)
             database = Database(root / "docchat.db")
             database.initialize()
             user = database.create_user("person@example.com", "hash")

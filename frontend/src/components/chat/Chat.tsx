@@ -26,7 +26,7 @@ interface ChatProps {
 
 export function Chat(props: ChatProps) {
   return (
-    <section className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-white">
+    <section className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-background text-foreground">
       <ChatHeader document={props.document} models={props.models} selectedModel={props.selectedModel} deleting={props.deleting} reindexing={props.reindexing} onModelChange={props.onModelChange} onDelete={props.onDeleteDocument} onReindex={props.onReindex} />
       <MessageList document={props.document} messages={props.messages} loading={props.messageLoading} error={props.messageError} onRetry={props.onRetryMessages} onPrompt={props.onPrompt} onShowSources={props.onShowSources} onFeedback={props.onFeedback} onReindex={props.onReindex} />
       <Composer documentStatus={props.document?.status ?? null} busy={props.busy} draftPrompt={props.draftPrompt} onSend={props.onSend} />

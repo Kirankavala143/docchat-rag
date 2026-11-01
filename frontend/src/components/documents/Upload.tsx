@@ -32,7 +32,7 @@ export function Upload({ allowedExtensions, maxFileMb, progress, uploading, onUp
 
   if (uploading && queuedFile) {
     return (
-      <div className="rounded-lg border bg-white p-3 shadow-sm">
+      <div className="rounded-lg border border-border bg-card p-3 text-card-foreground shadow-sm">
         <div className="flex items-center gap-2.5">
           <div className="grid h-8 w-8 place-items-center rounded-md bg-primary/[0.07] text-primary"><LoaderCircle className="h-4 w-4 animate-spin" /></div>
           <div className="min-w-0 flex-1">
@@ -48,7 +48,7 @@ export function Upload({ allowedExtensions, maxFileMb, progress, uploading, onUp
   return (
     <div
       className={cn(
-        "group rounded-lg border border-dashed border-slate-300 bg-white/70 text-center transition-colors hover:border-primary/50 hover:bg-primary/[0.025]",
+        "group rounded-lg border border-dashed border-border bg-card/70 text-center text-card-foreground transition-colors hover:border-primary/50 hover:bg-accent",
         compact ? "p-3" : "p-4",
         dragging && "border-primary bg-primary/[0.04]",
       )}
@@ -59,18 +59,18 @@ export function Upload({ allowedExtensions, maxFileMb, progress, uploading, onUp
     >
       <input id={inputId} ref={inputRef} type="file" className="hidden" accept={allowedExtensions.join(",")} onChange={(event) => { chooseFile(event.target.files?.[0]); event.currentTarget.value = ""; }} />
       <button type="button" className="flex w-full items-center gap-3 text-left focus-visible:outline-none" onClick={() => inputRef.current?.click()}>
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-600 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-muted text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
           {dragging ? <FileUp className="h-4 w-4" /> : <UploadCloud className="h-4 w-4" />}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium text-slate-700">Drop a file or browse</p>
+          <p className="text-xs font-medium text-foreground">Drop a file or browse</p>
           <p className="mt-1 truncate text-[9px] uppercase tracking-wide text-muted-foreground">
             {allowedExtensions.map((value) => value.replace(".", "")).join(" · ")} · max {maxFileMb} MB
           </p>
         </div>
       </button>
       {queuedFile && !uploading && (
-        <div className="mt-2 flex items-center justify-between rounded bg-muted px-2 py-1 text-[10px]">
+        <div className="mt-2 flex items-center justify-between rounded border border-border bg-muted px-2 py-1 text-[10px] text-foreground">
           <span className="truncate">{queuedFile.name}</span>
           <Button size="icon" variant="ghost" className="h-5 w-5" onClick={() => setQueuedFile(null)}><X className="h-3 w-3" /></Button>
         </div>

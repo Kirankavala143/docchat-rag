@@ -5,7 +5,7 @@ from pathlib import Path
 from backend.docchat.core.config import Config
 
 
-def test_config(root: Path) -> Config:
+def make_test_config(root: Path) -> Config:
     return Config(
         root=root,
         values={

@@ -25,9 +25,14 @@ class GeminiClient:
         self.timeout = int(
             config.section("openai").get("timeout_seconds", 120)
         )
+
         self.max_output_tokens = int(
-            config.section("openai").get("max_output_tokens", 700)
+            settings.get(
+                "max_output_tokens",
+                config.section("openai").get("max_output_tokens", 1200),
+            )
         )
+
 
     @property
     def configured(self) -> bool:
@@ -88,28 +93,71 @@ class GeminiClient:
             method="POST",
         )
 
-        try:
-            with urllib.request.urlopen(
-                request, timeout=self.timeout
-            ) as response:
-                result = json.loads(response.read().decode("utf-8"))
-        except urllib.error.HTTPError as exc:
-            details = exc.read().decode("utf-8", errors="replace")
-            raise OpenAIError(
-                f"Gemini API returned HTTP {exc.code}: {details[:1000]}",
-                exc.code,
-            ) from exc
-        except (urllib.error.URLError, TimeoutError) as exc:
-            raise OpenAIError(
-                f"Could not reach Gemini API: {exc}"
-            ) from exc
+
+        max_attempts = 3
+        retryable_status_codes = {429, 500, 502, 503, 504}
+
+        for attempt in range(1, max_attempts + 1):
+            try:
+                with urllib.request.urlopen(
+                    request, timeout=self.timeout
+                ) as response:
+                    result = json.loads(response.read().decode("utf-8"))
+                break
+
+            except urllib.error.HTTPError as exc:
+                details = exc.read().decode("utf-8", errors="replace")
+
+                if (
+                    exc.code in retryable_status_codes
+                    and attempt < max_attempts
+                ):
+                    import time
+                    time.sleep(1.5 * attempt)
+                    continue
+
+                raise OpenAIError(
+                    f"Gemini API returned HTTP {exc.code}: {details[:1000]}",
+                    exc.code,
+                ) from exc
+
+            except (urllib.error.URLError, TimeoutError) as exc:
+                if attempt < max_attempts:
+                    import time
+                    time.sleep(1.5 * attempt)
+                    continue
+
+                raise OpenAIError(
+                    f"Could not reach Gemini API after "
+                    f"{max_attempts} attempts: {exc}"
+                ) from exc
+
+
 
         candidates = result.get("candidates", [])
-        parts = (
-            candidates[0].get("content", {}).get("parts", [])
-            if candidates
-            else []
+        prompt_feedback = result.get("promptFeedback", {})
+
+        if not candidates:
+            block_reason = prompt_feedback.get("blockReason", "not provided")
+            raise OpenAIError(
+                "Gemini returned no candidates. "
+                f"Prompt block reason: {block_reason}. "
+                f"Response keys: {list(result.keys())}"
+            )
+
+        candidate = candidates[0]
+        finish_reason = candidate.get("finishReason", "not provided")
+        print(
+            f"[Gemini] model={selected_model}, "
+            f"configured_max_output_tokens={self.max_output_tokens}, "
+            f"finish_reason={finish_reason}, "
+            f"output_tokens={result.get('usageMetadata', {}).get('candidatesTokenCount', 0)}, "
+            f"usage={result.get('usageMetadata', {})}"
         )
+
+        content = candidate.get("content") or {}
+        parts = content.get("parts") or []
+
         answer_text = "\n".join(
             str(part["text"])
             for part in parts
@@ -118,8 +166,11 @@ class GeminiClient:
 
         if not answer_text:
             raise OpenAIError(
-                "Gemini returned no answer text. Check the model and API response."
+                "Gemini returned no answer text. "
+                f"Finish reason: {finish_reason}. "
+                f"Prompt feedback: {prompt_feedback}"
             )
+
 
         usage = result.get("usageMetadata", {})
         return GeneratedAnswer(

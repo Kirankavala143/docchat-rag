@@ -310,7 +310,7 @@ export function Workspace() {
   };
 
   return (
-    <main className="flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-[#f5f6f8]">
+    <main className="flex h-[100dvh] min-h-0 flex-col overflow-hidden bg-background text-foreground">
       <TopBar sourceCount={citations.length} onOpenNavigation={() => setNavigationOpen(true)} onOpenSources={toggleSources} onOpenSettings={() => setSettingsOpen(true)} />
       <div className={`grid min-h-0 flex-1 overflow-hidden ${desktopSourcesOpen ? "lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[280px_minmax(0,1fr)_330px]" : "lg:grid-cols-[280px_minmax(0,1fr)]"}`}>
         <aside className="hidden h-full min-h-0 overflow-hidden border-r lg:block"><LibrarySidebar {...sidebarProps} /></aside>

@@ -9,7 +9,7 @@ from unittest.mock import patch
 import yaml
 
 from backend.docchat.core.config import load_config, persist_openai_api_key
-from tests.helpers import test_config
+from tests.helpers import make_test_config
 
 
 class ConfigPersistenceTests(unittest.TestCase):
@@ -17,7 +17,7 @@ class ConfigPersistenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             config_path = root / "config.yaml"
-            original = test_config(root)
+            original = make_test_config(root)
             config_path.write_text(yaml.safe_dump(original.values, sort_keys=False), encoding="utf-8")
             config = load_config(config_path)
 
@@ -25,13 +25,14 @@ class ConfigPersistenceTests(unittest.TestCase):
 
             reloaded = load_config(config_path)
             self.assertEqual(reloaded.section("openai")["api_key"], "test-key-that-is-long-enough")
-            self.assertEqual(os.stat(config_path).st_mode & 0o777, 0o600)
+            if os.name == "posix":
+                self.assertEqual(os.stat(config_path).st_mode & 0o777, 0o600)
 
     def test_api_key_can_be_cleared(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             config_path = root / "config.yaml"
-            original = test_config(root)
+            original = make_test_config(root)
             original.values["openai"]["api_key"] = "test-key-that-is-long-enough"
             config_path.write_text(yaml.safe_dump(original.values, sort_keys=False), encoding="utf-8")
             config = load_config(config_path)
@@ -44,7 +45,7 @@ class ConfigPersistenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             config_path = root / "config.yaml"
-            original = test_config(root)
+            original = make_test_config(root)
             config_path.write_text(yaml.safe_dump(original.values, sort_keys=False), encoding="utf-8")
 
             with patch.dict(

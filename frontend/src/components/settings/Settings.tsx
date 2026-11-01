@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Eye, EyeOff, KeyRound, LoaderCircle, LogOut, ShieldCheck, Trash2 } from "lucide-react";
+import { CheckCircle2, Eye, EyeOff, KeyRound, LoaderCircle, LogOut, Monitor, Moon, ShieldCheck,   Sun, Trash2 } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -30,6 +31,7 @@ type ApiKeyValues = z.infer<typeof apiKeySchema>;
 
 export function Settings({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   const { settings, api, logout, refetchSettings } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [showKey, setShowKey] = useState(false);
   const [clearing, setClearing] = useState(false);
   const {
@@ -75,6 +77,36 @@ export function Settings({ open, onOpenChange }: { open: boolean; onOpenChange: 
         </DialogHeader>
 
         <div className="space-y-6 px-6 pb-6">
+                    
+          <section className="pt-1">
+            <p className="mb-3 text-xs font-semibold">Appearance</p>
+            <p className="mb-3 text-[10px] text-muted-foreground">
+              Choose how DocChat looks on your device.
+            </p>
+
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { value: "light", label: "Light", Icon: Sun },
+                { value: "dark", label: "Dark", Icon: Moon },
+                { value: "system", label: "System", Icon: Monitor },
+              ].map(({ value, label, Icon }) => (
+                <Button
+                  key={value}
+                  type="button"
+                  variant={theme === value ? "default" : "outline"}
+                  className="h-10 gap-2"
+                  aria-pressed={theme === value}
+                  onClick={() => setTheme(value as "light" | "dark" | "system")}
+                >
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </section>
+
+          <Separator />
+
           <section className="pt-1">
             <div className="mb-3 flex items-center justify-between">
               <div>
@@ -87,7 +119,7 @@ export function Settings({ open, onOpenChange }: { open: boolean; onOpenChange: 
               </Badge>
             </div>
 
-            <form className="rounded-lg border bg-slate-50/70 p-4" onSubmit={onSave}>
+            <form className="rounded-lg border border-border bg-card p-4 text-card-foreground" onSubmit={onSave}>
               <Label htmlFor="api-key" className="text-xs">API key</Label>
               <p className="mt-1 text-[10px] leading-4 text-muted-foreground">The saved value is never returned to the browser.</p>
               <div className="mt-3 flex gap-2">
@@ -100,7 +132,7 @@ export function Settings({ open, onOpenChange }: { open: boolean; onOpenChange: 
               {errors.apiKey && <p className="mt-2 text-[10px] text-destructive">{errors.apiKey.message}</p>}
               {settings.openai_configured && (
                 <AlertDialog>
-                  <AlertDialogTrigger asChild><Button type="button" variant="ghost" size="sm" className="mt-2 h-7 px-2 text-[10px] text-destructive hover:bg-red-50 hover:text-destructive"><Trash2 className="h-3 w-3" /> Remove saved key</Button></AlertDialogTrigger>
+                  <AlertDialogTrigger asChild><Button type="button" variant="ghost" size="sm" className="mt-2 h-7 px-2 text-[10px] text-destructive hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3 w-3" /> Remove saved key</Button></AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader><AlertDialogTitle>Remove the saved API key?</AlertDialogTitle><AlertDialogDescription>OpenAI-powered embeddings and answers will be unavailable until a new key is saved. Local extractive fallback may still be used.</AlertDialogDescription></AlertDialogHeader>
                     <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={() => void clearKey()} disabled={clearing}>{clearing ? "Removing…" : "Remove key"}</AlertDialogAction></AlertDialogFooter>

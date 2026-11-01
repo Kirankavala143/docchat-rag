@@ -16,17 +16,19 @@ export function MessageBubble({ message, onShowSources, onFeedback }: { message:
   }
 
   return (
-    <article className={cn("group mx-auto flex w-full max-w-3xl gap-3 px-4 py-4 sm:gap-4 sm:px-6", assistant && "bg-slate-50/70")}>
-      <div className={cn("mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg", assistant ? "bg-slate-950 text-white" : "border bg-white text-slate-600")}>
+    <article className={cn("group mx-auto flex w-full max-w-3xl gap-3 px-4 py-4 sm:gap-4 sm:px-6", assistant && "bg-muted/50")}>
+      <div className={cn("mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg", assistant
+        ? "bg-primary text-primary-foreground"
+        : "border border-border bg-card text-muted-foreground")}>
         {assistant ? <Bot className="h-3.5 w-3.5" /> : <User className="h-3.5 w-3.5" />}
       </div>
       <div className="min-w-0 flex-1">
         <div className="mb-2 flex items-center gap-2">
-          <span className="text-[11px] font-semibold text-slate-800">{assistant ? "DocChat" : "You"}</span>
+          <span className="text-[11px] font-semibold text-foreground">{assistant ? "DocChat" : "You"}</span>
           <span className="text-[9px] text-muted-foreground">{time}</span>
-          {assistant && message.model && <span className="rounded bg-slate-200/70 px-1.5 py-0.5 text-[8px] font-medium text-slate-500">{message.model}</span>}
+          {assistant && message.model && <span className="rounded bg-muted px-1.5 py-0.5 text-[8px] font-medium text-muted-foreground">{message.model}</span>}
         </div>
-        <div className={cn("whitespace-pre-wrap break-words text-[13px] leading-6 text-slate-700", assistant && "text-[13.5px]", message.failed && "text-red-700")}>
+        <div className={cn("whitespace-pre-wrap break-words text-[13px] leading-6 text-foreground", assistant && "text-[13.5px]", message.failed && "text-red-600 dark:text-red-400")}>
           {message.content || (message.streaming ? "Thinking with your document" : "")}
           {message.streaming && <span className="ml-1 inline-block h-3.5 w-1 animate-pulse rounded-sm bg-primary align-middle" />}
         </div>

@@ -46,7 +46,11 @@ export function ConversationList(props: ConversationListProps) {
       {props.loading ? <LoadingState rows={3} /> : props.error ? <QueryError compact error={props.error} onRetry={props.onRetry} /> : props.conversations.length ? (
         <div className="space-y-0.5">
           {props.conversations.map((conversation) => (
-            <div key={conversation.id} className={cn("group flex items-center rounded-md pr-1 transition-colors hover:bg-slate-100", props.selectedId === conversation.id && "bg-primary/[0.07] text-primary hover:bg-primary/[0.07]")}>
+            <div key={conversation.id} className={cn(
+                "group flex items-center rounded-md pr-1 transition-colors hover:bg-accent hover:text-accent-foreground",
+                props.selectedId === conversation.id &&
+  "bg-primary/10 text-primary hover:bg-primary/15",
+              )}>
               <button type="button" className="flex min-w-0 flex-1 items-center gap-2.5 px-2.5 py-2 text-left focus-visible:outline-none" onClick={() => props.onSelect(conversation.id)}>
                 <MessageSquare className="h-3.5 w-3.5 shrink-0 opacity-70" />
                 <span className="min-w-0 flex-1">
@@ -61,7 +65,7 @@ export function ConversationList(props: ConversationListProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <AlertDialogTrigger asChild>
-                      <DropdownMenuItem className="text-destructive focus:bg-red-50 focus:text-destructive" onSelect={(event) => event.preventDefault()}>
+                      <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive" onSelect={(event) => event.preventDefault()}>
                         <Trash2 /> Delete conversation
                       </DropdownMenuItem>
                     </AlertDialogTrigger>
@@ -84,7 +88,7 @@ export function ConversationList(props: ConversationListProps) {
           ))}
         </div>
       ) : (
-        <div className="mx-2 rounded-lg border border-dashed bg-white/60 px-3 py-5 text-center">
+        <div className="mx-2 rounded-lg border border-dashed border-border bg-card px-3 py-5 text-center">
           <MessageSquare className="mx-auto h-4 w-4 text-muted-foreground" />
           <p className="mt-2 text-[10px] leading-4 text-muted-foreground">
             {ready ? "Start a new conversation to ask your first question." : props.documentStatus === "failed" ? "Reindex the document before starting a conversation." : "Conversations will be available when processing finishes."}

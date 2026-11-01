@@ -29,23 +29,42 @@ def ready(context: AppContext = Depends(get_context)) -> dict[str, Any]:
     }
 
 
+
 @router.get("/api/settings")
 def safe_settings(
     user: dict[str, Any] = Depends(current_user),
     context: AppContext = Depends(get_context),
 ) -> dict[str, Any]:
+    provider = context.config.section("chat").get("provider", "openai")
+
+
+    if provider == "gemini":
+        chat_model = context.rag.gemini_client.chat_model
+        chat_models = [
+            {
+                "id": chat_model,
+                "label": "Gemini",
+                "description": "Gemini-powered document chat",
+            }
+        ]
+    else:
+        chat_model = context.openai.chat_model
+        chat_models = context.openai.chat_models
+
+
     return {
         "app_name": context.config.section("app").get("name"),
         "user": user,
-        "provider": context.config.section("chat").get("provider"),
+        "provider": provider,
         "openai_configured": context.openai.configured,
-        "chat_model": context.openai.chat_model,
-        "chat_models": context.openai.chat_models,
+        "chat_model": chat_model,
+        "chat_models": chat_models,
         "embedding_model": context.openai.embedding_model,
         "embedding_dimensions": context.openai.embedding_dimensions,
         "max_file_mb": context.config.section("uploads").get("max_file_mb"),
         "allowed_extensions": context.config.section("uploads").get("allowed_extensions"),
     }
+
 
 
 def save_api_key(context: AppContext, user_id: str, api_key: str) -> dict[str, bool]:

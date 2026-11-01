@@ -36,7 +36,7 @@ export function MessageList(props: MessageListProps) {
   }, [latestMessage?.streaming, scrollSignal]);
 
   return (
-    <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white" aria-live="polite">
+    <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-background text-foreground" aria-live="polite">
       {!props.document ? (
         <EmptyWorkspace />
       ) : props.document.status === "processing" ? (
@@ -48,7 +48,7 @@ export function MessageList(props: MessageListProps) {
       ) : props.error ? (
         <QueryError error={props.error} onRetry={props.onRetry} />
       ) : props.messages.length ? (
-        <div className="divide-y divide-slate-100 pb-6">
+        <div className="divide-y divide-border pb-6">
           {props.messages.map((message) => (
             <MessageBubble key={message.id} message={message} onShowSources={() => props.onShowSources(message.citations)} onFeedback={(rating) => props.onFeedback(message.id, rating)} />
           ))}
@@ -64,9 +64,9 @@ function EmptyWorkspace() {
   return (
     <div className="flex min-h-full items-center justify-center px-6 py-14 text-center">
       <div className="max-w-md">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border bg-slate-50 text-slate-500 shadow-sm"><FileSearch className="h-6 w-6" /></div>
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-border bg-muted text-muted-foreground shadow-sm"><FileSearch className="h-6 w-6" /></div>
         <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">Grounded answers</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.035em] text-slate-900">Choose a document to start</h2>
+        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.035em] text-foreground">Choose a document to start</h2>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">Select a file from your library or upload something new. DocChat will answer only from the selected document and show its evidence.</p>
       </div>
     </div>
@@ -77,9 +77,9 @@ function DocumentProcessing({ filename }: { filename: string }) {
   return (
     <div className="flex min-h-full items-center justify-center px-6 py-14 text-center">
       <div className="max-w-sm">
-        <div className="relative mx-auto grid h-14 w-14 place-items-center rounded-2xl border bg-white text-primary shadow-sm">
+        <div className="relative mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-border bg-card text-primary shadow-sm">
           <FileText className="h-6 w-6" />
-          <span className="absolute -right-1 -top-1 h-3 w-3 animate-pulse rounded-full border-2 border-white bg-amber-400" />
+          <span className="absolute -right-1 -top-1 h-3 w-3 animate-pulse rounded-full border-2 border-background bg-amber-400" />
         </div>
         <h2 className="mt-5 text-lg font-semibold tracking-tight">Preparing your document</h2>
         <p className="mt-2 text-xs leading-5 text-muted-foreground">Extracting and indexing “{filename}”. This view refreshes automatically when it’s ready.</p>
@@ -93,7 +93,7 @@ function DocumentFailed({ message, onReindex }: { message: string | null; onRein
   return (
     <div className="flex min-h-full items-center justify-center px-6 py-14 text-center">
       <div className="max-w-sm">
-        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-red-50 text-red-600"><AlertTriangle className="h-5 w-5" /></div>
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-destructive/10 text-destructive"><AlertTriangle className="h-5 w-5" /></div>
         <h2 className="mt-4 text-lg font-semibold">Document processing failed</h2>
         <p className="mt-2 text-xs leading-5 text-muted-foreground">{message || "DocChat couldn’t build the document index."}</p>
         <Button variant="outline" size="sm" className="mt-5" onClick={onReindex}><RefreshCw className="h-3.5 w-3.5" /> Retry indexing</Button>
@@ -111,7 +111,7 @@ function ReadyEmpty({ onPrompt }: { onPrompt: (prompt: string) => void }) {
         <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-muted-foreground">Ask about details, compare sections, extract actions, or start with one of these prompts.</p>
         <div className="mt-6 grid gap-2 text-left sm:grid-cols-3">
           {prompts.map((prompt) => (
-            <button key={prompt} type="button" onClick={() => onPrompt(prompt)} className="rounded-lg border bg-white p-3 text-[11px] leading-5 text-slate-600 shadow-sm transition-all hover:border-primary/30 hover:bg-primary/[0.02] hover:text-slate-900">
+            <button key={prompt} type="button" onClick={() => onPrompt(prompt)} className="rounded-lg border border-border bg-card p-3 text-[11px] leading-5 text-foreground shadow-sm transition-all hover:border-primary/30 hover:bg-accent hover:text-accent-foreground">
               <MessagesSquare className="mb-2 h-3.5 w-3.5 text-primary" />{prompt}
             </button>
           ))}

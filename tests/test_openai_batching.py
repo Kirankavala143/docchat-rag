@@ -5,13 +5,13 @@ import unittest
 from pathlib import Path
 
 from backend.docchat.infrastructure.openai_client import OpenAIClient, OpenAIError
-from tests.helpers import test_config
+from tests.helpers import make_test_config
 
 
 class OpenAIBatchingTests(unittest.TestCase):
     def test_embeddings_are_packed_by_estimated_token_budget(self):
         with tempfile.TemporaryDirectory() as directory:
-            config = test_config(Path(directory))
+            config = make_test_config(Path(directory))
             config.values["openai"]["api_key"] = "test-key"
             config.values["openai"]["embedding_dimensions"] = 2
             config.values["openai"]["embedding_batch_size"] = 10
@@ -38,7 +38,7 @@ class OpenAIBatchingTests(unittest.TestCase):
 
     def test_single_oversized_chunk_is_rejected_before_network_call(self):
         with tempfile.TemporaryDirectory() as directory:
-            config = test_config(Path(directory))
+            config = make_test_config(Path(directory))
             config.values["openai"]["api_key"] = "test-key"
             config.values["openai"]["embedding_max_input_tokens"] = 10
             client = OpenAIClient(config)
@@ -47,7 +47,7 @@ class OpenAIBatchingTests(unittest.TestCase):
 
     def test_answer_uses_the_selected_chat_model(self):
         with tempfile.TemporaryDirectory() as directory:
-            config = test_config(Path(directory))
+            config = make_test_config(Path(directory))
             config.values["openai"]["api_key"] = "test-key"
             client = OpenAIClient(config)
             observed_model: list[str] = []

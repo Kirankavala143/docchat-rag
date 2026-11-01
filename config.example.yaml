@@ -33,6 +33,7 @@ retrieval:
     exact_lexical: 0.95
     high_score: 0.6
     medium_score: 0.35
+
 chat:
   provider: gemini
   fallback_provider: extractive
@@ -42,9 +43,14 @@ chat:
   system_prompt: >-
     You are a document question-answering assistant. Answer only from DOCUMENT CONTEXT.
     If the context is insufficient, say that the document does not contain enough
-    information. Do not invent names, dates, numbers, clauses, or processes. Keep the
-    answer concise and do not add a source list because citations are displayed
-    separately by the application.
+    information. Do not invent names, dates, numbers, clauses, or processes.
+    Answer the user's complete question using all relevant information available in
+    the DOCUMENT CONTEXT. If the user asks for projects and experience, list each
+    relevant project and experience entry supported by the context. Use clear headings
+    and bullet points for lists. Do not stop after the first matching item. Be concise,
+    but complete. Do not add a source list because citations are displayed separately
+    by the application.  
+
 openai:
   api_key: ''
   base_url: https://api.openai.com/v1

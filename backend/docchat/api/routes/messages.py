@@ -35,9 +35,18 @@ async def stream_message(
     document = require_document(context, conversation["document_id"], user["id"])
     if document["status"] != "ready":
         raise HTTPException(status_code=409, detail="Document is not ready for chat")
-    selected_model = payload.model or context.openai.chat_model
-    if selected_model not in context.openai.allowed_chat_models:
-        raise HTTPException(status_code=422, detail="Selected chat model is unavailable")
+        
+    provider = str(context.config.section("chat").get("provider", "openai"))
+
+    if provider == "gemini":
+        selected_model = context.rag.gemini_client.chat_model
+        if not context.rag.gemini_client.configured:
+            raise HTTPException(status_code=503, detail="Gemini is not configured")
+    else:
+        selected_model = payload.model or context.openai.chat_model
+        if selected_model not in context.openai.allowed_chat_models:
+            raise HTTPException(status_code=422, detail="Selected chat model is unavailable")
+
     question = payload.content.strip()
     history_limit = int(context.config.section("chat").get("recent_messages", 10))
     history = context.database.list_messages(conversation_id, user["id"], history_limit)
