@@ -12,6 +12,14 @@ DocChat is a deliberately small local document chatbot. The browser UI, API, SQL
 ### Document Workspace
 <img width="953" height="423" alt="docchat-workspace" src="https://github.com/user-attachments/assets/067891e6-5701-4e3b-a106-6a597ae39f28" />
 
+🌐 Live Demo
+
+🚀 Try DocChat Live
+
+Explore the deployed application and experience document upload, chat, and source-based answers.
+
+Note: The local MVP is designed around local storage. The hosted Render demo uses ephemeral storage, so accounts and uploaded documents may reset after the service sleeps or redeploys.
+
 ## What is included
 
 - Email/password registration and signed bearer tokens
