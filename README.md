@@ -1,6 +1,16 @@
 # DocChat Local MVP
 
 DocChat is a deliberately small local document chatbot. The browser UI, API, SQLite database, uploaded files, and structured logs run on your computer. OpenAI is used only for embeddings and grounded answer generation when an API key is configured.
+
+
+## 🌐 Live Demo
+
+[🚀 Try DocChat Live](https://docchat-live-demo.onrender.com/)
+
+Explore the deployed application and experience document upload, chat, and source-based answers.
+
+> **Note:** The local MVP is designed around local storage. The hosted Render demo uses ephemeral storage, so accounts and uploaded documents may reset after the service sleeps or redeploys.
+
 ## Screenshots
 
 ### Account Registration
@@ -12,13 +22,7 @@ DocChat is a deliberately small local document chatbot. The browser UI, API, SQL
 ### Document Workspace
 <img width="953" height="423" alt="docchat-workspace" src="https://github.com/user-attachments/assets/067891e6-5701-4e3b-a106-6a597ae39f28" />
 
-🌐 Live Demo
 
-🚀 Try DocChat Live
-
-Explore the deployed application and experience document upload, chat, and source-based answers.
-
-Note: The local MVP is designed around local storage. The hosted Render demo uses ephemeral storage, so accounts and uploaded documents may reset after the service sleeps or redeploys.
 
 ## What is included
 
